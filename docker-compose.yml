@@ -1,0 +1,31 @@
+#
+# simple Storm cluster dockerization
+#
+
+kzk:
+    image: spotify/kafka
+
+# nimbus: supervises everything; talks to zookeeper
+nimbus:
+    image: eucm/storm-nimbus
+    ports:
+        - "6627:6627"
+    links:
+        - kzk
+    
+# ui: allows access to logs
+ui:
+    image: eucm/storm-ui
+    ports: 
+        - "8081:8081"
+    links: 
+        - nimbus
+        - kzk 
+
+# supervisor: supervises actual workers
+supervisor:
+    image: eucm/storm-supervisor
+    links:
+        - nimbus
+        - kzk
+        
