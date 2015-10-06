@@ -36,4 +36,4 @@ RUN chmod 0755 goStorm.sh
 USER ${USER_NAME}
 ENV STORM_CFG="$WORK_DIR/$STORM_VERSION/conf/storm.yaml"
 
-CMD [/bin/sh]
+CMD [ "/bin/bash" ]

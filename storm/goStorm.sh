@@ -9,20 +9,34 @@
 #     WORK_DIR - used for storm-local-dir
 
 CFG=$STORM_CFG
-UI_HOST=$UI_PORT_8081_TCP_ADDR
 ZK_HOST=$KZK_PORT_2181_TCP_ADDR
-NB_HOST=$NIMBUS_PORT_6627_TCP_ADDR
+MY_ID=$(uname -n)
+MY_HOST=$(grep $MY_ID /etc/hosts | awk '{print $1, "\t"}')
+
+case $1 in
+"nimbus") 
+    NB_HOST=${MY_HOST} 
+    ;;
+"ui") 
+    UI_HOST=${MY_HOST}
+    NB_HOST=$NIMBUS_PORT_6627_TCP_ADDR    
+    ;;
+"supervisor")
+    NB_HOST=$NIMBUS_PORT_6627_TCP_ADDR    
+    ;;
+esac
 
 echo "# created at $(date --rfc-3339=seconds)" > $CFG
 echo "ui.port: 8081" >> $CFG
-if [ -n $UI_PORT_8081_TCP_ADDR ] ; then 
+if [ -v UI_HOST ] ; then 
     echo "ui.host: $UI_HOST" >> $CFG
 fi
 echo "storm.zookeeper.servers:" >> $CFG
 echo "   - $ZK_HOST" >> $CFG
 echo "storm.local.dir: $WORK_DIR" >> $CFG
-if [ -n $NIMBUS_PORT_6627_TCP_ADDR ] ; then 
+if [ -v NB_HOST ] ; then 
     echo "nimbus.seeds: [${NB_HOST}]" >> $CFG
+    echo "nimbus.host: ${NB_HOST}" >> $CFG
 fi
 echo "--- dumping $CFG ---"
 cat $CFG
