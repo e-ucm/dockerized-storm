@@ -26,7 +26,8 @@ WORKDIR ${WORK_DIR}
 # download & install storm
 RUN wget http://apache.rediris.es/storm/${STORM_VERSION}/${STORM_VERSION}.tar.gz \
     && tar -xvzf ${STORM_VERSION}.tar.gz \
-    && ln -s ${WORK_DIR}/${STORM_VERSION}/bin/storm .
+    && ln -s ${WORK_DIR}/${STORM_VERSION}/bin/storm . \
+    && rm ${STORM_VERSION}.tar.gz
 
 # add config script, and make it executable
 COPY goStorm.sh goStorm.sh
@@ -35,5 +36,9 @@ USER root
 RUN chmod 0755 goStorm.sh
 USER ${USER_NAME}
 ENV STORM_CFG="$WORK_DIR/$STORM_VERSION/conf/storm.yaml"
+ENV STORM_DIR="$WORK_DIR/$STORM_VERSION/"
+ENV STORM_VOL="$WORK_DIR/storm_vol"
+
+VOLUME storm_vol
 
 CMD [ "/bin/bash" ]

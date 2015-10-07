@@ -19,7 +19,7 @@ case $1 in
     ;;
 "ui") 
     UI_HOST=${MY_HOST}
-    NB_HOST=$NIMBUS_PORT_6627_TCP_ADDR    
+    NB_HOST=$NIMBUS_PORT_6627_TCP_ADDR
     ;;
 "supervisor")
     NB_HOST=$NIMBUS_PORT_6627_TCP_ADDR    
@@ -52,5 +52,10 @@ echo "command=./storm $1" >> $CFG
 # supervisord does not show log output by console
 # (would require privs to do so); not using.
 # supervisord -n -c $CFG
+
+case $1 in
+"nimbus")
+  cp -r ${STORM_DIR}/* ${STORM_VOL} 
+esac
 
 ./storm $1
