@@ -23,7 +23,7 @@ RUN groupadd -r ${USER_NAME} \
     && useradd -r -d ${WORK_DIR} -g ${USER_NAME} ${USER_NAME} \
     && mkdir ${WORK_DIR} \
     && mkdir ${STORM_VOL} \
-    && chown ${USER_NAME}:${USER_NAME} ${WORK_DIR}
+    && chown -R ${USER_NAME}:${USER_NAME} ${WORK_DIR}
 USER ${USER_NAME}
 WORKDIR ${WORK_DIR}
 
