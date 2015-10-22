@@ -55,6 +55,7 @@ echo "command=./storm $1" >> $CFG
 
 case $1 in
 "nimbus")
+  mkdir ${STORM_VOL}
   cp -r ${STORM_DIR}/* ${STORM_VOL} 
 esac
 
