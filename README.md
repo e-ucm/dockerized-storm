@@ -1,6 +1,6 @@
 # dockerized-storm
 
-Scripts to launch storm servers via [docker-compose](https://docs.docker.com/compose/) or [docker](https://docs.docker.com/)
+Scripts to launch [Storm](http://storm.apache.org/) servers via [docker-compose](https://docs.docker.com/compose/) or [docker](https://docs.docker.com/)
 
 The folders contain Dockerfiles to install and launch
 - nimbus 
