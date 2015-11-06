@@ -1,13 +1,13 @@
 # dockerized-storm
 
-Scripts to launch storm servers via [docker-compose](https://docs.docker.com/compose/ or [docker](https://docs.docker.com/)
+Scripts to launch storm servers via [docker-compose](https://docs.docker.com/compose/) or [docker](https://docs.docker.com/)
 
 The folders contain Dockerfiles to install and launch
 - nimbus 
 - supervisor
 - ui
 
-Additionally, the main `docker-compose.yml` launches ZooKeeper and Kafka; and the `storm` folder contains a base container from which `nimbus`, `supervisor` and `ui` extend.
+Additionally, the main `docker-compose.yml` launches [ZooKeeper](https://zookeeper.apache.org/) and [Kafka](http://kafka.apache.org/); and the `storm` folder contains a base container from which `nimbus`, `supervisor` and `ui` extend.
 
 ## Basic use
 
