@@ -1,31 +1,54 @@
 #
 # simple Storm cluster dockerization
 #
+version: '2'
 
-kzk:
-    image: spotify/kafka
+services:
+    # zookeeper and kafka
+    kzk:
+        image: eucm/kzk
+        volumes:
+        - zookeeper-data:/var/lib/zookeeper
+        - kafka-data:/tmp/kafka-logs
 
-# nimbus: supervises everything; talks to zookeeper
-nimbus:
-    image: eucm/storm-nimbus
-    ports:
-        - "6627:6627"
-    links:
-        - kzk
-    
-# ui: allows access to logs
-ui:
-    image: eucm/storm-ui
-    ports: 
-        - "8081:8081"
-    links: 
-        - nimbus
-        - kzk 
-
-# supervisor: supervises actual workers
-supervisor:
-    image: eucm/storm-supervisor
-    links:
-        - nimbus
-        - kzk
-        
+    # nimbus: supervises everything; talks to zookeeper
+    nimbus:
+        image: eucm/storm-nimbus:test
+        links:
+            - kzk
+        ports:
+            - "6627:6627"
+        environment:
+            - KZK_PORT_2181_TCP_ADDR=kzk
+            - NIMBUS_PORT_6627_TCP_ADDR=nimbus
+            - UI_PORT_8081_TCP_ADDR=ui
+            
+    # ui: allows access to logs
+    ui:
+        image: eucm/storm-ui:test
+        links:
+            - nimbus
+            - kzk
+        ports: 
+            - "8081:8081"
+        environment:
+            - KZK_PORT_2181_TCP_ADDR=kzk
+            - NIMBUS_PORT_6627_TCP_ADDR=nimbus
+            - UI_PORT_8081_TCP_ADDR=ui            
+            
+    # supervisor: supervises actual workers
+    supervisor:
+        image: eucm/storm-supervisor:test
+        links:
+            - nimbus
+            - kzk
+        environment:
+            - KZK_PORT_2181_TCP_ADDR=kzk
+            - NIMBUS_PORT_6627_TCP_ADDR=nimbus
+            - UI_PORT_8081_TCP_ADDR=ui            
+            
+volumes:
+  zookeeper-data:  
+    driver: local
+  kafka-data:
+    driver: local    
