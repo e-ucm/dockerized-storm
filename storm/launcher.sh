@@ -26,7 +26,7 @@ case $1 in
     ;;
 esac
 
-echo "# $1 service-script created at $(date --rfc-3339=seconds)" > $CFG
+echo "# $1 config-script created at $(date -Iseconds)" > $CFG
 echo "ui.port: 8081" >> $CFG
 if [ -v UI_HOST ] ; then 
     echo "ui.host: $UI_HOST" >> $CFG
@@ -42,19 +42,9 @@ echo "--- dumping $CFG ---"
 cat $CFG
 echo "--- $CFG end ---"
 
-CFG="service.cfg"
-echo "[supervisord]" >> $CFG
-echo "[program:$1]" >> $CFG
-echo "autostart=true" >> $CFG
-echo "autorestart=true" >> $CFG
-echo "command=./storm $1" >> $CFG
-echo "stdout_logfile=/dev/fd/1" >> $CFG
-echo "stdout_logfile_maxbytes=0" >> $CFG
-
-
 case $1 in
 "nimbus")
   cp -r ${STORM_DIR}/* ${STORM_VOL} 
 esac
 
-supervisord -n -c $CFG
+./storm $1

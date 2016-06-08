@@ -4,10 +4,13 @@
 #
 FROM java:openjdk-8-jre-alpine
 
-# get deps
+# get deps:
+#    wget to download storm
+#    bash for scripting
+#    nano for in-container debugging
+#    python required by nimbus
 RUN apk update \
-    && apk add supervisor wget nano bash \
-    && mkdir -p /var/log/supervisor
+    && apk add wget nano bash python
 
 # setup env
 ENV USER_NAME="user" \
