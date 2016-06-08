@@ -2,11 +2,11 @@
 # Intended as a base image from which the different Storm 
 # servers can be launched
 #
-FROM ubuntu:vivid
+FROM java:openjdk-8-jre-alpine
 
 # get deps
-RUN apt-get update \
-    && apt-get install -y supervisor wget openjdk-8-jre-headless nano \
+RUN apk update \
+    && apk add supervisor wget nano bash \
     && mkdir -p /var/log/supervisor
 
 # setup env
@@ -19,8 +19,8 @@ ENV STORM_CFG="$WORK_DIR/$STORM_VERSION/conf/storm.yaml" \
     HOME="$WORK_DIR"
 
 # setup user, group and workdir
-RUN groupadd -r ${USER_NAME} \
-    && useradd -r -d ${WORK_DIR} -g ${USER_NAME} ${USER_NAME} \
+RUN addgroup -S ${USER_NAME} \
+    && adduser -S -h ${WORK_DIR} -H -G ${USER_NAME} ${USER_NAME} \
     && mkdir ${WORK_DIR} \
     && mkdir ${STORM_VOL} \
     && chown -R ${USER_NAME}:${USER_NAME} ${WORK_DIR}
