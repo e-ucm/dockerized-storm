@@ -34,10 +34,10 @@ RUN wget http://apache.rediris.es/storm/${STORM_VERSION}/${STORM_VERSION}.tar.gz
     && rm ${STORM_VERSION}.tar.gz
 
 # add config script, and make it executable
-COPY goStorm.sh goStorm.sh
+COPY launcher.sh launcher.sh
 # need to briefly elevate privs to chmod
 USER root
-RUN chmod 0755 goStorm.sh
+RUN chmod 0755 launcher.sh
 USER ${USER_NAME}
 
 VOLUME $STORM_VOL

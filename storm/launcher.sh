@@ -26,7 +26,7 @@ case $1 in
     ;;
 esac
 
-echo "# created at $(date --rfc-3339=seconds)" > $CFG
+echo "# $1 service-script created at $(date --rfc-3339=seconds)" > $CFG
 echo "ui.port: 8081" >> $CFG
 if [ -v UI_HOST ] ; then 
     echo "ui.host: $UI_HOST" >> $CFG
@@ -48,14 +48,13 @@ echo "[program:$1]" >> $CFG
 echo "autostart=true" >> $CFG
 echo "autorestart=true" >> $CFG
 echo "command=./storm $1" >> $CFG
-# this should run some kind of supervision; but
-# supervisord does not show log output by console
-# (would require privs to do so); not using.
-# supervisord -n -c $CFG
+echo "stdout_logfile=/dev/fd/1" >> $CFG
+echo "stdout_logfile_maxbytes=0" >> $CFG
+
 
 case $1 in
 "nimbus")
   cp -r ${STORM_DIR}/* ${STORM_VOL} 
 esac
 
-./storm $1
+supervisord -n -c $CFG
