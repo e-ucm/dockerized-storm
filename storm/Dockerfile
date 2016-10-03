@@ -12,7 +12,7 @@ RUN apt-get update \
 # setup env
 ENV USER_NAME="user" \
     WORK_DIR="/app" \
-    STORM_VERSION="apache-storm-0.10.0"
+    STORM_VERSION="apache-storm-1.0.2"
 ENV STORM_CFG="$WORK_DIR/$STORM_VERSION/conf/storm.yaml" \
     STORM_DIR="$WORK_DIR/$STORM_VERSION/" \
     STORM_VOL="$WORK_DIR/storm_vol" \
