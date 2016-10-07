@@ -36,7 +36,6 @@ echo "   - $ZK_HOST" >> $CFG
 echo "storm.local.dir: $WORK_DIR" >> $CFG
 if [ -v NB_HOST ] ; then 
     echo "nimbus.seeds: [${NB_HOST}]" >> $CFG
-    echo "nimbus.host: ${NB_HOST}" >> $CFG
 fi
 echo "--- dumping $CFG ---"
 cat $CFG
