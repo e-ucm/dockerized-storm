@@ -1,4 +1,4 @@
-FROM eucm/storm:1.0.2
+FROM eucm/storm:1.1.1
 
 EXPOSE 8081
 
