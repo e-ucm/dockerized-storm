@@ -37,6 +37,25 @@ echo "storm.local.dir: $WORK_DIR" >> $CFG
 if [ -v NB_HOST ] ; then 
     echo "nimbus.seeds: [${NB_HOST}]" >> $CFG
 fi
+
+# Parse Docker env vars to customize Storm
+#
+# e.g. Setting the env var worker.heap.memory.mb=768
+#
+# will cause Storm.ini to have the value worker.heap.memory.mb: 768
+#
+# see https://github.com/apache/storm/blob/master/conf/defaults.yaml 
+
+while IFS='=' read -r envvar_key envvar_value
+do
+    # Storm env vars need to have at least two dot separated lowercase words, e.g. `cluster.name`
+    if [[ "$envvar_key" =~ ^[a-z0-9_]+\.[a-z0-9_]+ ]]; then
+        if [[ ! -z $envvar_value ]]; then
+		  echo "$(envvar_key): $(envvar_value)" >> $CFG
+        fi
+    fi
+done < <(env)
+
 echo "--- dumping $CFG ---"
 cat $CFG
 echo "--- $CFG end ---"
